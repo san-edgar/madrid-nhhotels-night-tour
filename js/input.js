@@ -18,7 +18,7 @@ export function createInput() {
     const right = keys.has('KeyD') || keys.has('ArrowRight');
     cmd.throttle = (up ? 1 : 0) + (down ? -1 : 0);
     cmd.brake = down ? 1 : 0;
-    cmd.steer = (left ? -1 : 0) + (right ? 1 : 0);
+    cmd.steer = (left ? 1 : 0) + (right ? -1 : 0);
     cmd.handbrake = keys.has('Space');
     return cmd;
   }
