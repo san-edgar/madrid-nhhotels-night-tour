@@ -14,12 +14,12 @@ export function createHud(root, roads, hotels) {
       <div>SPEED <span id="hud-speed">0</span> km/h</div><div>SCORE <span id="hud-score">0</span></div></div>
     <div id="hud-tr" class="hud-panel">CHECKPOINTS <span id="hud-cp">0/14</span></div>
     <div id="hud-toast"></div>
-    <div id="hud-hint" class="hud-panel">WASD/arrows drive · SPACE handbrake · R reset · ENTER start</div>
+    <div id="hud-hint" class="hud-panel">WASD/arrows drive · SPACE handbrake · R back to hotel · ENTER start</div>
     <canvas id="minimap" width="440" height="440"></canvas>
     <div id="title" class="overlay"><div class="title-inner">
       <h1>Madrid NH Hotels Night Tour</h1><p class="sub">Night drive · 14 checkpoints</p>
       <p class="press">Press ENTER to drive</p>
-      <p class="controls">WASD / arrows — drive · SPACE — handbrake · R — reset</p>
+      <p class="controls">WASD / arrows — drive · SPACE — handbrake · R — back to last hotel</p>
       <p class="loading" id="loading">loading city…</p></div></div>
     <div id="win" class="overlay hidden"><div class="title-inner">
       <h1>TOUR COMPLETE</h1><p class="sub">All 14 hotels visited</p>

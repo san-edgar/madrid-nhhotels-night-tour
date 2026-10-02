@@ -76,12 +76,17 @@ export function createSim(data, startX, startY, startHeading) {
       if (p[1] < miny) miny = p[1]; if (p[1] > maxy) maxy = p[1];
     }
     if (maxx - minx < 0.5 || maxy - miny < 0.5) continue;
-    bGrid.insert(minx, miny, maxx, maxy, { minx, miny, maxx, maxy });
+    // erode 1 m: arcade/passage footprints stop being invisible walls,
+    // and near-misses don't wedge the car
+    const e = 1.0;
+    if (maxx - minx < 2 * e + 0.5 || maxy - miny < 2 * e + 0.5) continue;
+    bGrid.insert(minx, miny, maxx, maxy, { minx: minx + e, miny: miny + e, maxx: maxx - e, maxy: maxy - e });
   }
   const _bq = [];
   function collideBuildings() {
     bGrid.query(S.x, S.y, _bq);
     const r = C.radius;
+    for (let pass = 0; pass < 2; pass++) { // second pass settles wedges between two walls
     for (const b of _bq) {
       if (S.x > b.minx - r && S.x < b.maxx + r && S.y > b.miny - r && S.y < b.maxy + r) {
         const pl = S.x - (b.minx - r), pr = (b.maxx + r) - S.x;
@@ -93,6 +98,7 @@ export function createSim(data, startX, startY, startHeading) {
         else { S.y = b.maxy + r; if (S.vy > 0) S.vy *= -0.25; }
         S.hit = 0.25;
       }
+    }
     }
   }
 
