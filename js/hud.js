@@ -11,7 +11,7 @@ function fmtTime(t) {
 export function createHud(root, roads, hotels) {
   root.innerHTML = `
     <div id="hud-tl" class="hud-panel"><div class="hud-title">Madrid NH Hotels Night Tour</div><div>TIME <span id="hud-time">00:00.0</span></div>
-      <div>SPEED <span id="hud-speed">0</span> km/h</div><div>SCORE <span id="hud-score">0</span></div></div>
+      <div>SPEED <span id="hud-speed">0</span> km/h</div><div>SCORE <span id="hud-score">0</span></div><div id="hud-street" class="hud-street">· · ·</div></div>
     <div id="hud-tr" class="hud-panel">CHECKPOINTS <span id="hud-cp">0/14</span></div>
     <div id="hud-toast"></div>
     <div id="hud-hint" class="hud-panel">WASD/arrows drive · SPACE handbrake · R back to hotel · ENTER start</div>
@@ -28,7 +28,7 @@ export function createHud(root, roads, hotels) {
 
   const el = (id) => root.querySelector('#' + id);
   const timeEl = el('hud-time'), speedEl = el('hud-speed'), scoreEl = el('hud-score');
-  const cpEl = el('hud-cp'), toastEl = el('hud-toast');
+  const cpEl = el('hud-cp'), toastEl = el('hud-toast'), streetEl = el('hud-street');
   const titleEl = el('title'), winEl = el('win'), loadingEl = el('loading');
 
   // minimap: prerender roads once
@@ -79,12 +79,13 @@ export function createHud(root, roads, hotels) {
     mg.restore();
   }
 
-  let lastToast = '';
+  let lastToast = '', lastStreet = '';
   function update(S, now) {
     timeEl.textContent = fmtTime(S.timer);
     speedEl.textContent = Math.round(S.speedKmh);
     scoreEl.textContent = Math.round(S.score);
     cpEl.textContent = S.visited + '/' + S.total;
+    if (S.street !== lastStreet) { streetEl.textContent = S.street || '· · ·'; lastStreet = S.street; }
     const toast = S.toasts.length ? S.toasts[S.toasts.length - 1].text : '';
     if (toast !== lastToast) { toastEl.textContent = toast; lastToast = toast; }
     if (S.state === 'title') { titleEl.classList.remove('hidden'); }

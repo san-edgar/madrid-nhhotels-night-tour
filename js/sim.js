@@ -43,7 +43,7 @@ export function createSim(data, startX, startY, startHeading) {
     const hw = (CFG.roadWidth[r.class] || CFG.defaultRoadWidth) / 2;
     const p = r.pts;
     for (let i = 0; i < p.length - 1; i++) {
-      const s = { ax: p[i][0], ay: p[i][1], bx: p[i + 1][0], by: p[i + 1][1], hw };
+      const s = { ax: p[i][0], ay: p[i][1], bx: p[i + 1][0], by: p[i + 1][1], hw, name: r.name || '' };
       segList.push(s);
       roadGrid.insert(
         Math.min(s.ax, s.bx) - maxHalf, Math.min(s.ay, s.by) - maxHalf,
@@ -51,9 +51,9 @@ export function createSim(data, startX, startY, startHeading) {
     }
   }
   const _q = [];
-  function roadDist(x, y) {
+  function nearestRoad(x, y) {
     roadGrid.query(x, y, _q);
-    let best = 1e9;
+    let best = 1e9, bestName = '';
     for (const s of _q) {
       const dx = s.bx - s.ax, dy = s.by - s.ay;
       const L2 = dx * dx + dy * dy;
@@ -61,10 +61,11 @@ export function createSim(data, startX, startY, startHeading) {
       t = t < 0 ? 0 : t > 1 ? 1 : t;
       const qx = s.ax + t * dx, qy = s.ay + t * dy;
       const d = Math.hypot(x - qx, y - qy) - s.hw;
-      if (d < best) best = d;
+      if (d < best) { best = d; bestName = s.name; }
     }
-    return best;
+    return { d: best, name: bestName };
   }
+  function roadDist(x, y) { return nearestRoad(x, y).d; }
 
   // building AABB index (solid walls)
   const bGrid = makeGrid(100);
@@ -114,7 +115,7 @@ export function createSim(data, startX, startY, startHeading) {
     timer: 0, score: 0, driftScore: 0,
     visited: 0, total: hotels.length,
     toasts: [], // {text, t}
-    hit: 0, offroad: false,
+    hit: 0, offroad: false, street: '',
     hotels,
   };
 
@@ -166,7 +167,9 @@ export function createSim(data, startX, startY, startHeading) {
     if (S.drifting) { const bonus = latSpd * dt * 2; S.driftScore += bonus; S.score += bonus; }
 
     // off-road drag
-    const rd = roadDist(S.x, S.y);
+    const nr = nearestRoad(S.x, S.y);
+    const rd = nr.d;
+    S.street = rd < 30 ? nr.name : '';
     S.offroad = rd > CFG.offroad.margin;
     if (S.offroad) {
       const k = Math.exp(-CFG.offroad.drag * dt);

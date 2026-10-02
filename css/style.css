@@ -10,6 +10,7 @@ html, body { margin: 0; padding: 0; overflow: hidden; background: #04070d; heigh
 #hud-tl { top: 14px; left: 14px; }
 #hud-tl span, #hud-tr span { color: #ffd97a; font-weight: 700; }
 .hud-title { font-size: 13px; letter-spacing: 2px; color: #ffd97a; margin-bottom: 4px; }
+.hud-street { color: #ffffff; font-size: 16px; font-weight: 700; margin-top: 4px; white-space: nowrap; }
 #hud-tr { top: 14px; right: 14px; }
 #hud-hint { bottom: 14px; left: 14px; font-size: 12px; color: #8fa3c8; }
 #hud-toast {
