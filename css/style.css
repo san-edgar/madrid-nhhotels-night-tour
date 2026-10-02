@@ -1,0 +1,39 @@
+/* Stage B greybox HUD: plain, functional, bound to real sim state. Art at Stage C4. */
+html, body { margin: 0; padding: 0; overflow: hidden; background: #04070d; height: 100%; }
+#app canvas { display: block; }
+#hud { position: fixed; inset: 0; pointer-events: none; font-family: ui-monospace, Menlo, Consolas, monospace; }
+.hud-panel {
+  position: absolute; background: rgba(4, 8, 16, 0.62); color: #cfe0ff;
+  border: 1px solid #2a3a58; padding: 8px 12px; font-size: 15px; line-height: 1.5;
+  border-radius: 4px;
+}
+#hud-tl { top: 14px; left: 14px; }
+#hud-tl span, #hud-tr span { color: #ffd97a; font-weight: 700; }
+.hud-title { font-size: 13px; letter-spacing: 2px; color: #ffd97a; margin-bottom: 4px; }
+#hud-tr { top: 14px; right: 14px; }
+#hud-hint { bottom: 14px; left: 14px; font-size: 12px; color: #8fa3c8; }
+#hud-toast {
+  position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
+  background: rgba(4, 8, 16, 0.78); border: 1px solid #ffc94d; color: #ffd97a;
+  padding: 10px 22px; font-size: 18px; border-radius: 4px; white-space: nowrap;
+}
+#hud-toast:empty { display: none; }
+#minimap {
+  position: absolute; right: 14px; bottom: 14px; width: 220px; height: 220px;
+  border-radius: 50%; border: 2px solid #2a3a58; background: #060a12;
+}
+.overlay {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: #04070d url('../title-screen.webp') center / cover no-repeat;
+}
+.overlay.hidden { display: none; }
+.title-inner {
+  text-align: center; color: #eef3ff; background: rgba(3, 6, 12, 0.66);
+  padding: 42px 64px; border: 1px solid #2a3a58; border-radius: 8px;
+}
+.title-inner h1 { font-size: 44px; letter-spacing: 6px; margin: 0 0 6px; color: #ffd97a; }
+.title-inner .sub { font-size: 16px; color: #9fb4dd; margin: 0 0 18px; }
+.title-inner .press { font-size: 20px; color: #7df3ff; animation: blink 1.2s infinite; }
+.title-inner .controls { font-size: 13px; color: #8fa3c8; }
+.title-inner .loading { font-size: 13px; color: #5a6f96; }
+@keyframes blink { 50% { opacity: 0.35; } }
